@@ -7,7 +7,9 @@
           >Load Submitted Experiences</base-button
         >
       </div>
-      <ul v-if="!isLoading">
+      <p v-if="isLoading">Loading...</p>
+
+      <ul v-else-if="!isLoading && results.length > 0">
         <survey-result
           v-for="result in results"
           :key="result.id"
@@ -16,7 +18,13 @@
         ></survey-result>
       </ul>
 
-      <p v-else>Loading...</p>
+      <p v-else-if="!isLoading && error">
+        {{ error }}
+      </p>
+
+      <p v-else>
+        No stored experiences found. Start adding some survey results!
+      </p>
     </base-card>
   </section>
 </template>
@@ -43,20 +51,31 @@ export default {
     return {
       results: [],
       isLoading: false,
+      error: null,
     };
   },
   methods: {
     setData(rawData) {
+      if (!rawData) {
+        this.isLoading = false;
+        return;
+      }
+
       this.results = Object.values(rawData);
       this.isLoading = false;
     },
     loadExperiences() {
       this.isLoading = true;
+      this.error = null;
 
       axios
         .get(URL)
         .then(({ data }) => this.setData(data))
-        .catch((e) => console.log(e));
+        .catch((e) => {
+          console.log(e);
+          this.isLoading = false;
+          this.error = 'Failed to fetch data... please try again later.';
+        });
     },
   },
   mounted() {
