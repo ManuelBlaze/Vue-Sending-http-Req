@@ -78,7 +78,8 @@ export default {
       this.invalidInput = false;
 
       const data = {
-        userName: this.enteredName,
+        id: new Date().toISOString(),
+        name: this.enteredName,
         rating: this.chosenRating,
       };
 

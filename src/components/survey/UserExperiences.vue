@@ -3,7 +3,9 @@
     <base-card>
       <h2>Submitted Experiences</h2>
       <div>
-        <base-button>Load Submitted Experiences</base-button>
+        <base-button @click="loadExperiences"
+          >Load Submitted Experiences</base-button
+        >
       </div>
       <ul>
         <survey-result
@@ -18,12 +20,38 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 import SurveyResult from './SurveyResult.vue';
 
+/**
+ * firebase DB url
+ * @constant
+ * @type {String}
+ */
+const URL =
+  'https://vue-http-demo-4ab69-default-rtdb.firebaseio.com/surveys.json';
+
 export default {
-  props: ['results'],
+  // props: ['results'],
   components: {
     SurveyResult,
+  },
+  data() {
+    return {
+      results: [],
+    };
+  },
+  methods: {
+    setData(rawData) {
+      this.results = Object.values(rawData);
+    },
+    loadExperiences() {
+      axios
+        .get(URL)
+        .then(({ data }) => this.setData(data))
+        .catch((e) => console.log(e));
+    },
   },
 };
 </script>
