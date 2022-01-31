@@ -50,6 +50,16 @@
 </template>
 
 <script>
+import axios from 'axios';
+
+/**
+ * firebase DB url
+ * @constant
+ * @type {String}
+ */
+const URL =
+  'https://vue-http-demo-4ab69-default-rtdb.firebaseio.com/surveys.json';
+
 export default {
   data() {
     return {
@@ -75,16 +85,19 @@ export default {
       // this.$emit('survey-submit', data);
 
       // persist data into DB
-      fetch(
-        'https://vue-http-demo-4ab69-default-rtdb.firebaseio.com/surveys.json',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      // fetch(
+      //   'https://vue-http-demo-4ab69-default-rtdb.firebaseio.com/surveys.json',
+      //   {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify(data),
+      //   }
+      // );
+
+      // with axios
+      axios.post(URL, data);
 
       this.enteredName = '';
       this.chosenRating = null;
