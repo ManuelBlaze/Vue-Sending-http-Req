@@ -7,7 +7,7 @@
           >Load Submitted Experiences</base-button
         >
       </div>
-      <ul>
+      <ul v-if="!isLoading">
         <survey-result
           v-for="result in results"
           :key="result.id"
@@ -15,6 +15,8 @@
           :rating="result.rating"
         ></survey-result>
       </ul>
+
+      <p v-else>Loading...</p>
     </base-card>
   </section>
 </template>
@@ -40,13 +42,17 @@ export default {
   data() {
     return {
       results: [],
+      isLoading: false,
     };
   },
   methods: {
     setData(rawData) {
       this.results = Object.values(rawData);
+      this.isLoading = false;
     },
     loadExperiences() {
+      this.isLoading = true;
+
       axios
         .get(URL)
         .then(({ data }) => this.setData(data))
